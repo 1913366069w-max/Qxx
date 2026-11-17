@@ -1,0 +1,10 @@
+<view wx:if="{{visible}}" class="privacy-shade" catchtouchmove="stop">
+  <view class="privacy-card" role="dialog" aria-label="隐私保护说明">
+    <view class="privacy-title">联网服务与隐私保护</view>
+    <view class="privacy-body">联网评论会处理评分、评论文字、时间和微信用户标识，用于展示评论及删除本人评论。评论内容将匿名公开。</view>
+    <view class="privacy-body">请先阅读<text class="privacy-link" bindtap="readPolicy">《青小寻用户隐私保护指引》</text>，也可查看<text class="privacy-link" bindtap="openContract">微信官方{{name}}</text>。</view>
+    <view class="privacy-body">不同意时，仍可使用地图、搜索和离线餐厅资料。</view>
+    <button id="privacy-agree" class="privacy-agree" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="agree">同意并继续</button>
+    <button class="privacy-decline" bindtap="decline">暂不同意，继续浏览</button>
+  </view>
+</view>

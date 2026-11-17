@@ -1,0 +1,44 @@
+<view class="study-page">
+  <view class="study-header"><view class="study-title">学在青大</view><view wx:if="{{role}}" class="role-switch" bindtap="switchRole">{{roleName}} · 切换</view></view>
+  <scroll-view scroll-y class="study-scroll">
+    <view wx:if="{{!role}}" class="role-choice">
+      <view class="section-title">选择你的课表</view>
+      <button class="role-card" data-role="undergraduate" bindtap="chooseRole"><view>本科生</view><text>本科教务系统</text></button>
+      <button class="role-card" data-role="graduate" bindtap="chooseRole"><view>研究生</view><text>研究生教务系统</text></button>
+    </view>
+    <view wx:else class="study-body">
+      <view class="action-card"><view class="section-title">导入{{roleName}}课表</view>
+        <button class="primary" bindtap="openOfficial">打开教务系统</button>
+        <button class="quiet" bindtap="copyUrl">复制教务网址</button>
+        <view class="action-row"><button bindtap="chooseFile">选择课表文件</button><button bindtap="copyTemplate">复制 CSV 模板</button></view>
+        <textarea class="paste-input" maxlength="120000" value="{{paste}}" bindinput="setPaste" placeholder="也可粘贴 CSV、日历内容或从表格复制的内容"/>
+        <button class="quiet" bindtap="importPaste">导入粘贴内容</button>
+      </view>
+      <view wx:if="{{message}}" class="study-error">{{message}}</view>
+      <view class="term-card"><view class="section-title">本学期</view>
+        <picker mode="date" value="{{termStart}}" bindchange="setTermStart"><view class="term-date">{{termStart?termStart:'设置第 1 周的周一日期'}}　⌄</view></picker>
+        <view class="week-nav"><button disabled="{{week<=1}}" bindtap="prevWeek">‹</button><view>第 {{week}} 周</view><button disabled="{{week>=30}}" bindtap="nextWeek">›</button></view>
+        <button wx:if="{{termStart}}" class="today" bindtap="currentWeek">回到本周</button>
+      </view>
+      <view class="course-toolbar"><view class="section-title">每周课程</view><button bindtap="toggleForm">＋ 添加课程</button></view>
+      <view wx:if="{{showForm}}" class="form-card"><form bindsubmit="addCourse">
+        <input name="name" maxlength="80" placeholder="课程名称"/>
+        <picker range="{{dayNames}}" value="{{dayIndex}}" bindchange="chooseDay"><view class="day-picker">{{dayNames[dayIndex]}}　⌄</view></picker>
+        <view class="form-row"><input name="start" type="number" placeholder="开始节数"/><input name="end" type="number" placeholder="结束节数"/></view>
+        <view class="form-row"><input name="startTime" placeholder="开始时间 08:00"/><input name="endTime" placeholder="结束时间 09:35"/></view>
+        <input name="teacher" maxlength="80" placeholder="教师"/><input name="place" maxlength="100" placeholder="地点"/><input name="weeks" value="1-16" placeholder="上课周数，如 1-16、7-11单"/>
+        <button class="primary" form-type="submit">保存课程</button>
+      </form></view>
+      <view wx:for="{{days}}" wx:for-item="dateItem" wx:key="day" class="day-card">
+        <view class="day-title">{{dateItem.label}} <text>{{dateItem.date}}</text></view>
+        <view wx:if="{{dateItem.courses.length===0}}" class="empty-day">暂无课程</view>
+        <view wx:for="{{dateItem.courses}}" wx:for-item="slot" wx:key="id" class="course-card">
+          <view class="course-time">{{slot.period}} <text wx:if="{{slot.time}}">{{slot.time}}</text></view>
+          <view class="course-name">{{slot.name}}</view><view class="course-meta">{{slot.place||'地点待补充'}} · {{slot.teacher||'教师待补充'}}</view>
+          <button class="course-delete" data-id="{{slot.id}}" bindtap="deleteCourse">删除</button>
+        </view>
+      </view>
+      <button wx:if="{{courses.length}}" class="clear-button" bindtap="clearSchedule">清空本机课表</button>
+    </view>
+  </scroll-view>
+</view>

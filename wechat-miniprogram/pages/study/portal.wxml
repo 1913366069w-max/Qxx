@@ -1,0 +1,14 @@
+<view class="portal-page">
+  <image class="portal-logo" src="/images/icon.png" mode="aspectFit"/>
+  <view class="portal-title">{{roleName}}教务系统</view>
+  <view class="portal-card">
+    <text class="portal-description">请在手机浏览器中访问教务系统。</text>
+    <text class="portal-url" selectable>{{url}}</text>
+    <button class="portal-copy" bindtap="copyUrl">{{copied?'再次复制网址':'复制教务网址'}}</button>
+    <text wx:if="{{copied}}" class="portal-success">网址已复制。打开 Safari 或其他浏览器，粘贴到地址栏即可访问。</text>
+    <text wx:if="{{message}}" class="portal-error">{{message}}</text>
+    <view class="portal-steps"><text>1. 在浏览器登录并查看课表。</text><text>2. 将 CSV 或日历文件发送到微信聊天，返回“学在青大”选择文件导入；也可粘贴课程表格。</text></view>
+    <text class="portal-note">当前微信环境不能内嵌打开该教务网页。</text>
+  </view>
+  <button class="portal-back" bindtap="backToStudy">返回导入课表</button>
+</view>

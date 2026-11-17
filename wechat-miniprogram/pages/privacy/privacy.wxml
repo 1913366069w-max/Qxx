@@ -1,0 +1,21 @@
+<view class="privacy-page">
+  <view class="policy-title">青小寻用户隐私保护指引</view>
+  <view class="policy-meta">更新日期：{{policy.version}}</view>
+  <view wx:for="{{policy.sections}}" wx:key="title" class="policy-section"><view class="section-title">{{item.title}}</view><text selectable>{{item.body}}</text></view>
+  <button wx:if="{{pendingConsent}}" class="back-button" bindtap="resumeConsent">阅读完毕，继续授权</button>
+  <view class="policy-section">
+    <view class="section-title">管理我的信息</view>
+    <view class="policy-meta">{{agreed?'已同意当前版本指引':'尚未同意当前版本指引'}}</view>
+    <button bindtap="openContract">查看微信官方隐私指引</button>
+    <button disabled="{{loading}}" bindtap="listMine">{{loading?'请稍候…':'查看我的云端评论'}}</button>
+    <view wx:if="{{error}}" class="policy-error">{{error}}</view>
+    <view wx:if="{{loaded && !reviews.length}}" class="policy-meta">暂无本人云端评论。</view>
+    <view wx:for="{{reviews}}" wx:key="id" class="my-review"><view class="section-title">{{item.targetName}}</view><view class="policy-meta">{{item.rating}} 星 · {{item.date}}</view><text selectable>{{item.comment}}</text><button data-index="{{index}}" disabled="{{loading}}" bindtap="deleteMine">删除这条评论</button></view>
+    <view wx:if="{{reviews.length===100}}" class="policy-meta">本次展示最近100条，删除后可再次加载；更多记录可联系开发者处理。</view>
+    <button bindtap="clearLocal">清除本机评论</button>
+    <button wx:if="{{agreed}}" bindtap="revoke">撤回同意</button>
+    <view class="policy-meta">隐私联系：{{policy.contact}}</view>
+  </view>
+  <button class="back-button" bindtap="back">返回</button>
+</view>
+<privacy-dialog bindchange="consentChanged"/>

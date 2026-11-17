@@ -1,0 +1,37 @@
+{
+  "description": "青小寻微信小程序，已绑定项目AppID。",
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "compileType": "miniprogram",
+  "appid": "wx9590889b770efc12",
+  "projectname": "青小寻",
+  "libVersion": "latest",
+  "setting": {
+    "es6": true,
+    "minified": true,
+    "urlCheck": true,
+    "minifyWXML": true
+  },
+  "packOptions": {
+    "ignore": [
+      {"type":"folder","value":"pages/privacy"},
+      {"type":"folder","value":"components/privacy-dialog"},
+      {"type":"file","value":"utils/cloud-api.js"},
+      {"type":"file","value":"utils/privacy.js"},
+      {"type":"file","value":"utils/privacy-policy.js"},
+      {"type":"file","value":"data/sources.js"},
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "file",
+        "value": "隐私指引后台填写说明.md"
+      },
+      {
+        "type": "file",
+        "value": "使用微信开发者工具导入.txt"
+      }
+    ]
+  }
+}

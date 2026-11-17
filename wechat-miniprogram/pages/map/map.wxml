@@ -1,0 +1,47 @@
+<view class="screen">
+  <view class="top"><view class="mini-brand"><image class="brand-icon" src="/images/icon.png" mode="aspectFit"/><view class="brand-name">青小寻</view></view><button class="picker" bindtap="openSearch">搜索地点</button></view>
+  <view wx:if="{{routeText || hasStart}}" class="route-bar"><text wx:if="{{routeText}}">{{routeText}}</text><button wx:if="{{hasStart}}" bindtap="clearRoute">清除</button></view>
+  <view class="map-frame"><canvas type="2d" id="mapCanvas" class="canvas" hidden="{{showInfo || showFood || showSearch}}" bindtouchstart="touch" catchtouchmove="touch" bindtouchend="touch" bindtouchcancel="cancel" aria-label="青岛大学浮山校区地图"></canvas></view>
+  <view class="controls"><button aria-label="放大" bindtap="zoomIn">＋</button><button aria-label="缩小" bindtap="zoomOut">−</button><button class="fit" bindtap="fit">全图</button><button class="info" bindtap="info">说明</button></view>
+  <view class="bottom"><button bindtap="openFood">吃在青大</button><button bindtap="openStudy">学在青大</button><text>{{zoom}}×</text></view>
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+  <view wx:if="{{showSearch}}" class="shade"><view class="sheet search-sheet"><view class="sheet-title">搜索地点</view><input class="search-input" value="{{searchQuery}}" bindinput="setSearchQuery" placeholder="输入楼名、校门、商铺或快递" focus="{{showSearch}}"/><scroll-view scroll-y class="source-text"><view wx:if="{{searchResults.length===0}}" class="search-empty">没有匹配的地点</view><button wx:for="{{searchResults}}" wx:key="index" class="search-row" data-index="{{item.index}}" bindtap="chooseSearchResult">{{item.label}}</button></scroll-view><button bindtap="closeSearch">返回地图</button></view></view>
+  <view wx:if="{{showInfo}}" class="shade" bindtap="closeInfo"><view class="sheet contact-sheet"><text selectable>联系方式：QXXqdu（微信号）</text><text class="contact-note">（小程序内测中，有任何意见定会积极采纳）</text></view></view>
+  <view wx:if="{{showFood}}" class="shade">
+    <view class="sheet food-sheet">
+      <view class="sheet-title">{{activePlace?activePlace.name:'吃在青大'}}</view>
+      <scroll-view scroll-y class="source-text">
+        <block wx:if="{{!activePlace}}">
+          <view class="food-tabs"><button wx:for="{{foodTabs}}" wx:key="id" class="food-tab {{foodTab===item.id?'active':''}}" data-tab="{{item.id}}" bindtap="setFoodTab">{{item.name}}</button></view>
+          <view wx:if="{{foodPlaces.length===0}}" class="food-summary">该分类暂无条目。</view>
+          <button wx:for="{{foodPlaces}}" wx:key="id" data-index="{{index}}" bindtap="openMiniPlace" class="food-row">{{item.name}}</button>
+        </block>
+        <block wx:else>
+          <view class="food-summary">{{activePlace.summary}}</view>
+          <view wx:for="{{activePlace.entries}}" wx:for-index="entryIndex" wx:key="title" class="food-entry">
+            <view class="entry-title">{{item.title}}</view><view class="entry-note">{{item.subtitle}}</view>
+            <block wx:if="{{item.stalls && item.stalls.length}}">
+              <view wx:for="{{item.stalls}}" wx:for-item="foodStall" wx:for-index="stallIndex" wx:key="name" class="food-stall">
+                <button class="food-stall-toggle {{expandedStallEntry===entryIndex && expandedStallIndex===stallIndex?'expanded':''}}" data-entry="{{entryIndex}}" data-stall="{{stallIndex}}" bindtap="toggleFoodStall"><text class="food-stall-name">{{foodStall.name}}</text><text class="food-stall-hint">{{expandedStallEntry===entryIndex && expandedStallIndex===stallIndex?'收起菜品':'查看菜品'}}</text></button>
+                <block wx:if="{{expandedStallEntry===entryIndex && expandedStallIndex===stallIndex}}">
+                  <view wx:if="{{!foodStall.dishes || foodStall.dishes.length===0}}" class="food-menu-empty">菜品待补充</view>
+                  <view wx:for="{{foodStall.dishes}}" wx:for-item="foodDish" wx:key="name" class="food-dish">
+                    <text class="food-dish-name">{{foodDish.name}}</text>
+                    <text wx:if="{{foodDish.price}}" class="food-dish-price">{{foodDish.price}}</text>
+                  </view>
+                  <view wx:if="{{foodStall.options && foodStall.options.length}}" class="food-options">
+                    <text>可选加料：</text><text wx:for="{{foodStall.options}}" wx:for-item="foodOption" wx:key="*this" class="food-option">{{foodOption.name || foodOption}}</text>
+                  </view>
+                </block>
+              </view>
+            </block>
+            <block wx:else>
+              <view wx:for="{{item.dishes}}" wx:for-item="stall" wx:key="*this" class="stall-row">{{stall}}</view>
+            </block>
+          </view>
+        </block>
+      </scroll-view>
+      <button wx:if="{{activePlace}}" bindtap="backFood">返回列表</button><button wx:else bindtap="closeFood">返回地图</button>
+    </view>
+  </view>
+</view>

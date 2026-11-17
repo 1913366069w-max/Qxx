@@ -1,0 +1,7 @@
+{
+  "pages": ["pages/map/map", "pages/study/study", "pages/study/portal"],
+  "window": {"navigationBarTitleText":"青小寻 · 浮山校区","navigationBarBackgroundColor":"#fbfcf4","navigationBarTextStyle":"black","backgroundColor":"#f4f4e3"},
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
